@@ -14,4 +14,3 @@ I'm really interested in AI models as I've used to AI to debug code before and b
 
 The goal with this is to use this for Celestial Body Classification and Spacecraft Trajectory Prediction.
 And to learn more about constructing these models based on how well they perform each task.
-
