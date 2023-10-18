@@ -1,6 +1,6 @@
 # WHAT:
 
-## Neural-Network-Implementation
+## Neural-Network-Development
 Currently working on the creation of AI models to use for classification and prediction purposes.
 
 
