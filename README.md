@@ -4,13 +4,6 @@
 Currently working on the creation of AI models to use for classification and prediction purposes.
 
 
-First off I wanna say I was inspired by this video. (click the button)
-
-
-
-
-
-[![YouTube](https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube)](https://youtu.be/hfMk-kjRv4c?si=Vf2bQ-DIMO73yG1e)
 
 # WHY:
 
