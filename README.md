@@ -24,7 +24,7 @@ And so in the Layer Class, we have a layer class that creates the layer, this wh
 
 We then have a CalculateOutputs function that simply calculates the outputs of a layer of inputs. So it would calculate the layer after any given layer, based off of it's weights and biases.
 
-Then in the Neural Network Class, we have a function that makes layers by creating a for loop with the layer function in the Layer Class.
+We also have a function that makes layers by creating a for loop with the layer function in the Layer Class.
 And then we have a CalculateOutputs function that runs a for loop using the previous CalculateOutputs function, to calculate the final layer.
 
 And then there's a classify function, that lets me know which outgoing node, has the largest value. That lets me know what the network is leaning towards currently.
