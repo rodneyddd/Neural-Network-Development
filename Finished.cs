@@ -1,5 +1,72 @@
 using System;
 
+public class LayerLearnData
+{
+    // Assuming these are the properties used in Layer class
+    public double[] inputs;            // Inputs to the layer
+    public double[] weightedInputs;    // Weighted sums calculated before applying activation
+    public double[] activations;       // Activations after applying the activation function
+    public double[] nodeValues;        // Node values used in backpropagation
+
+    // Constructor to initialize arrays based on the size of the layer
+    public LayerLearnData(int numNodesOut)
+    {
+        // Initialize arrays with the size of the layer's output nodes
+        weightedInputs = new double[numNodesOut];
+        activations = new double[numNodesOut];
+        nodeValues = new double[numNodesOut];
+    }
+}
+
+// IActivation Interface
+public interface IActivation
+{
+    // Activation function applied to the weighted sum
+    double Activate(double weightedSum);
+
+    // Derivative of the activation function with respect to the weighted sum
+    double Derivative(double weightedSum);
+}
+
+// ICost Interface
+public interface ICost
+{
+    // Calculate the cost between predicted and expected outputs
+    double Calculate(double predicted, double expected);
+
+    // Derivative of the cost with respect to the predicted output
+    double Derivative(double predicted, double expected);
+}
+
+//   Example ActivationSigmoid class implementing IActivation
+public class ActivationSigmoid : IActivation
+{
+    public double Activate(double weightedSum)
+    {
+        return 1 / (1 + Math.Exp(-weightedSum));
+    }
+
+    public double Derivative(double weightedSum)
+    {
+        double sigmoid = Activate(weightedSum);
+        return sigmoid * (1 - sigmoid);
+    }
+}
+
+// Example QuadraticCost class implementing ICost
+public class QuadraticCost : ICost
+{
+    public double Calculate(double predicted, double expected)
+    {
+        return 0.5 * Math.Pow(predicted - expected, 2);
+    }
+
+    public double Derivative(double predicted, double expected)
+    {
+        return predicted - expected;
+    }
+}
+
 public class Layer
 {
 
@@ -26,6 +93,13 @@ public class Layer
         //creating an array of biases
         biases = new double[numNodesOut];
 
+        //initialize the nodes coming in, with "this"
+        //initialize the nodes coming out, with "this"
+        //you initialize the weights as a 2d array, nodes in, by nodes out to account for each connection (as a new 2d array)
+        //initialize the biases of outgoing nodes (as a new array)
+        //we initialize them dynamically because we want to make sure we have the space for them
+
+
         costGradientW = new double[weights.Length];
         costGradientB = new double[biases.Length];
         weightVelocities = new double[weights.Length];
@@ -34,23 +108,31 @@ public class Layer
         InitializeRandomWeights(rng);
     }
 
-    //calculates the activations of the output nodes based on the given input values and the weights and biases of the layer.
-
+    //calculates the activations of the output nodes based on the given input values
+    //the parameter is a layer, it outputs another layer
     public double[] CalculateOutputs(double[] inputs, LayerLearnData learnData)
     {
-        // an array of weightedinputs
-        double[] weightedInputs = new double[numNodesOut];
+        // initializes an array weightedInputs to store the weighted sums for each output node
+        //its important to remember that the nodes coming in refer to the previous layer and nodes going out
+        //refer to the number of nodes in that current layer, so in the case of a 2 3 4, the second layer would have 2 coming in and 3 going out.
+        double[] weightedInputs = new double[numNodesOut]; 
 
-        for (int nodeOut = 0; nodeOut < numNodesOut; nodeOut++)
+        //this helps make the next layer the size of the outgoing nodes of the current layer if that makes sense
+
+
+
+        for (int nodeOut = 0; nodeOut < numNodesOut; nodeOut++) //here we go through the output nodes
         {
             // calculate the weighted input for the current output node
+
+            //set this variable to the current bias value
             double weightedInput = biases[nodeOut];
 
-            for (int nodeIn = 0; nodeIn < numNodesIn; nodeIn++)
+            for (int nodeIn = 0; nodeIn < numNodesIn; nodeIn++) //here is the inner loop where you add the weight to the equation, input(weight) + bioas
             {
                 weightedInput += inputs[nodeIn] * GetWeight(nodeIn, nodeOut);
             }
-            weightedInputs[nodeOut] = weightedInput;
+            weightedInputs[nodeOut] = weightedInput; //
         }
 
         //putting it through the activation function
@@ -65,7 +147,7 @@ public class Layer
         learnData.weightedInputs = weightedInputs;
         learnData.activations = activations;
 
-        return activations;
+        return activations; //you're returning the actual array of the new output array
     }
 
 
@@ -82,7 +164,7 @@ public class Layer
             weights[i] = regularizationFactor * weights[i] + weightVelocities[i];
 
             //resetting the gradient for the next iteration
-            costGradientW[i] = 0;
+            costGradientW[i] = 0; //remember the gradients are usually set in the update gradients function
         }
 
         for (int i = 0; i < biases.Length; i++)
@@ -92,7 +174,7 @@ public class Layer
             biases[i] += biasVelocities[i];
 
             //resetting the gradient for the next iteration
-            costGradientB[i] = 0;
+            costGradientB[i] = 0; //remember the gradients are usually set in the update gradients function
         }
     }
 
@@ -100,52 +182,89 @@ public class Layer
     public void CalculateOutputLayerNodeValues(LayerLearnData layerLearnData, double[] expectedOutputs, ICost cost)
     {
         double[] activations = layerLearnData.activations;
+        //create an array, that has the activation values from the layerlearndata object,
+        // these values (layerlearndata.activations) were initialized in the calculateoutputs function
+        // these are the activations from the start
 
-        for (int nodeOut = 0; nodeOut < numNodesOut; nodeOut++)
+        for (int nodeOut = 0; nodeOut < numNodesOut; nodeOut++) //loop through the last layers nodes
         {
+            //the costderivative is the objects derivative via the icost class
             double costDerivative = cost.Derivative(activations[nodeOut], expectedOutputs[nodeOut]);
+
+            //same concept here, the original activation from the layer class, "IActivation activation", is getting it's derivative calculated
+            //remember that that activation variable is like where all the activations stem from
             double activationDerivative = activation.Derivative(layerLearnData.weightedInputs[nodeOut]);
 
             layerLearnData.nodeValues[nodeOut] = activationDerivative * costDerivative;
+            //and here is where we update the last layer
         }
     }
 
     // Calculate node values for hidden layers based on next layer's node values
+    //remember that this function is called in the updateallgradients function, and the parameter is the next layer, 
+    //as in the one after the index in the for loop
     public void CalculateHiddenLayerNodeValues(LayerLearnData layerLearnData, Layer nextLayer, double[] nextLayerNodeValues)
     {
+        //parameters are the layers, as in all of them, and by layers
+        // i mean one column and the nodevalues which are, the size of number of nodes out, (the output layer)
+
         double[] activations = layerLearnData.activations;
+        //create an array, that has the activation values from the layerlearndata object,
+        // these values (layerlearndata.activations) were initialized in the calculateoutputs function
 
         for (int nodeIndex = 0; nodeIndex < numNodesOut; nodeIndex++)
+        //numnodesout = outgoing nodes in that layer
+        //looping through the outgoing nodes of that layer
+        //it knows the numnodesout because remember it was called in reference to a layer object
+        //  nodeValues = hiddenLayer.CalculateHiddenLayerNodeValues(layers[hiddenLayerIndex + 1], nodeValues);
         {
             double weightedInputDerivativeSum = 0;
+            //initializing the weightedinputderivativesum to 0, to be filled later
 
             // Calculate sum of weighted input derivatives from the next layer
+
+            //For each node in the hidden layer, 
+            //it calculates the sum of the derivatives of the weighted inputs from the nodes in the next layer
             for (int nextNodeIndex = 0; nextNodeIndex < nextLayer.numNodesOut; nextNodeIndex++)
             {
-                double weight = nextLayer.GetWeight(nodeIndex, nextNodeIndex);
-                weightedInputDerivativeSum += weight * nextLayerNodeValues[nextNodeIndex];
+                double weight = nextLayer.GetWeight(nodeIndex, nextNodeIndex); //here you get the weight of the next layer
+                weightedInputDerivativeSum += weight * nextLayerNodeValues[nextNodeIndex]; 
+                //here you multiply the weight by the next layer node value
+                //and use that to get the weightedinputderivative sum
+
+                
             }
 
+            //Within the outer loop, there is an inner loop that iterates over each output node of the next layer (nextLayer). 
+            //The goal is to calculate the sum of weighted input derivatives from the next layer to the current hidden layer.
+
             // calculate activation derivative and node value for the hidden layer
+            //first part of the equation based on the classes i wrote, that helps update the nodes
             double activationDerivative = activation.Derivative(layerLearnData.weightedInputs[nodeIndex]);
+           
             layerLearnData.nodeValues[nodeIndex] = weightedInputDerivativeSum * activationDerivative;
+            //here is where we update the values based on the activationderivative and the weightedinputderivativesum
         }
     }
 
-    //
+    //update gradients 
     public void UpdateGradients(LayerLearnData layerLearnData)
     {
         for (int nodeOut = 0; nodeOut < numNodesOut; nodeOut++)
         {
             for (int nodeIn = 0; nodeIn < numNodesIn; nodeIn++)
             {
+                //here we update the gradients of the weights
                 costGradientW[GetFlatWeightIndex(nodeIn, nodeOut)] += layerLearnData.inputs[nodeIn] * layerLearnData.nodeValues[nodeOut];
             }
-
+            //here we update the gradients of the biases
             costGradientB[nodeOut] += layerLearnData.nodeValues[nodeOut];
         }
     }
+
     //gets the weight by means of a helper function
+    //here you return a function of the specific node in regards to the weight array
+    //after all in reference to the calculate outputs function it is looking at individual nodes
     public double GetWeight(int nodeIn, int nodeOut)
     {
         return weights[GetFlatWeightIndex(nodeIn, nodeOut)];
@@ -155,7 +274,10 @@ public class Layer
     {
         // Each output neuron has 'numNodesIn' weights associated with it
         // We use the formula: weightIndex = outputNeuronIndex * numNodesIn + inputNeuronIndex
+        //multiply the 2p times the # of nodes in + 1p
         return outputNeuronIndex * numNodesIn + inputNeuronIndex;
+
+        //this function is supposed to map a 2d array to a 1d array 
     }
 
     //chooses the best activation function for the best situation
@@ -183,11 +305,15 @@ public class NeuralNetwork
     public NeuralNetwork(params int[] layerSizes)
     {
         layers = new Layer[layerSizes.Length - 1];
+        //this is an array of 2 layers side by side
+        //layers as in measuring two consecutive ones
+        //the minus one is to exclude the first layer i believe
 
         for (int i = 0; i < layers.Length; i++)
         {
             layers[i] = new Layer(layerSizes[i], layerSizes[i + 1], new Random());
         }
+        //here we run a for loop where we run through the layer constructor and make new layers 
     }
 
     //calculates the absolute final output layer, by looping through each layer with the calculate outputs function
@@ -217,6 +343,8 @@ public class NeuralNetwork
         foreach (DataPoint dataPoint in trainingBatch)
         {
             UpdateAllGradients(dataPoint);
+            //here we update the gradients
+            //but we dont apply them until the applygradients formula
         }
         //gradient descent step: update all the weights and biases in the network
         ApplyGradients(learnRate / trainingBatch.Length);
@@ -226,26 +354,33 @@ public class NeuralNetwork
 
     void UpdateAllGradients(DataPoint dataPoint)
     {
-        //each layer will store the values we need, such as the weighted inputs and activations
-        //this is so that the data will be saved in the layer script
+        //first we calculate the outputs so as to run the neural network and have it passed through and ran through
         CalculateOutputs(dataPoint.inputs);
+
+        //this calculates the final layer of the datapoint inputs
 
         //create a layer array
         Layer outputLayer = layers[layers.Length - 1];
-        //using that array to store the parts 
+
+        //using that array to make an array the size of the output nodes 
         double[] nodeValues = new double[outputLayer.numNodesOut];
 
         
         outputLayer.CalculateOutputLayerNodeValues(dataPoint.expectedOutputs, new QuadraticCost(), nodeValues);
+        //here we calculate the cost gradients for the output layer
 
-        //telling the code to update the gradients for all the weights and biases
+        //telling the code to update the gradients for the final layer
         outputLayer.UpdateGradients(nodeValues);
 
         //this for loop is simply responsible for updating the gradients of the hidden layers
         for (int hiddenLayerIndex = layers.Length - 2; hiddenLayerIndex >= 0; hiddenLayerIndex--)
         {
             Layer hiddenLayer = layers[hiddenLayerIndex];
+            //hidden layer represents the specific layer we're going over
             nodeValues = hiddenLayer.CalculateHiddenLayerNodeValues(layers[hiddenLayerIndex + 1], nodeValues);
+            //seems the parameter in this example is the next layer
+            //parameters are the layers, as in all of them, and by layers i mean one column and the nodevalues which are, 
+            //the size of number of nodes out, (the output layer)
             hiddenLayer.UpdateGradients(nodeValues);
         }
     }
@@ -288,6 +423,8 @@ public class NeuralNetwork
         return maxIndex;
     }
 }
+
+
 
 /*
 
