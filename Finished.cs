@@ -231,8 +231,6 @@ public class Layer
                 weightedInputDerivativeSum += weight * nextLayerNodeValues[nextNodeIndex]; 
                 //here you multiply the weight by the next layer node value
                 //and use that to get the weightedinputderivative sum
-
-                
             }
 
             //Within the outer loop, there is an inner loop that iterates over each output node of the next layer (nextLayer). 
@@ -348,7 +346,7 @@ public class NeuralNetwork
         }
         //gradient descent step: update all the weights and biases in the network
         ApplyGradients(learnRate / trainingBatch.Length);
-         //reset all gradients to 0 to start over
+        //reset all gradients to 0 to start over
         ClearAllGradients();
     }
 
@@ -373,6 +371,8 @@ public class NeuralNetwork
         outputLayer.UpdateGradients(nodeValues);
 
         //this for loop is simply responsible for updating the gradients of the hidden layers
+        //The loop aims to iterate over the hidden layers in reverse order, 
+        //starting from the second-to-last layer (layers.Length - 2) and moving towards the first hidden layer (0).
         for (int hiddenLayerIndex = layers.Length - 2; hiddenLayerIndex >= 0; hiddenLayerIndex--)
         {
             Layer hiddenLayer = layers[hiddenLayerIndex];
