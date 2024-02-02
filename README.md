@@ -74,7 +74,7 @@ And then you simply make a for loop going through the layers variable and it run
 And therefore makes each layer, a layer object.
 Equipping it with all its respective initializations and what not.
 
-### And then we have a calculateoutputs function inside the neural network class that has a parameter of inputs, that being the first layer 
+### And then we have a CalculateOutputs function inside the neural network class that has a parameter of inputs, that being the first layer 
 
 And then you create a for loop going through all the layers 
 Where you create a variable that equals that layer and the outputs being calculated 
