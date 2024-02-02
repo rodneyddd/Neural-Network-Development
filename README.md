@@ -41,7 +41,7 @@ costGradientB = new double[biases.Length];
 weightVelocities = new double[weights.Length];
 biasVelocities = new double[biases.Length];
 
-and these variables are given there respective lengths according to the main variable (weights or biases) they were assigned, and then we intialize random weights at the end of the layer function.
+These variables are given there respective lengths according to the main variable (weights or biases) they were assigned, and then we intialize random weights at the end of the layer function.
 
 
 ### The Calculate outputs function has two parameters, that of a layer and that of a layerlearndata object
@@ -50,17 +50,17 @@ It's going to use the layer to calculate the outputs and it's simply going to up
 First we create an array weightedInputs to store the weighted sums for each output node, loop through the outgoing nodes and create a weightedinput variable to hold the current bias value.
 Then you loop through the inner nodes to access the weights, and add them to the equation
 (equation: wx + b)
-the bias value is gotten before the inner loop so each nodes bias value, pertains to each weight product between one nodes and rest of the nodes it's connected to.
+The bias value is gotten before the inner loop so each nodes bias value, pertains to each weight product between one nodes and rest of the nodes it's connected to.
 
 And so the bias value corresponds to each node to node weight connection 
 Since one bias value corresponds to one node and that one nodes corresponds to every other node in the next layer, in terms of weight connections.
 
 And then there’s an activation array that’s the size of the number of nodes out
-The idea there being to put each output node through the activation function 
+The idea there being to put each output node through the activation function. 
 
-then you simply update the object
+Then you simply update the object with certain values. 
 
-And then return the activation array 
+And then return the activation array, that being the outputs of that layer calculated.
 
 ## In the NeuralNetwork class
 We have an array of layers, that’s an array of layer objects. variable name = layers
