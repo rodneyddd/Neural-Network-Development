@@ -84,8 +84,8 @@ And you return that variable
 What this does is calculate the final layer, since you’re calculating the output for each layer.
 
 
-### right after the CALCULATEOUTPUTS function you have a classify function that has an parameter of outputs, that benig the final layer
-### and it calls a helper function, INDEXOFMAXVALUE, which simply returns the highest value within an array
+### Right after the CALCULATEOUTPUTS function you have a classify function that has an parameter of outputs, that being the final layer
+### and it calls a helper function, INDEXOFMAXVALUE, which simply returns the highest value within an array.
 
 
 
