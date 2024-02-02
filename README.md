@@ -21,45 +21,36 @@ And we can choose our preference based off of "weights". Each neuron has a weigh
 Each neuron also has a bias which will be explained more later but it's very useful when it comes to activation functions. 
 
 ## In the layer class 
-we have nodes coming in and node going out,
-the nodes going in refer to the nodes coming in from the previous layer
-and the nodes going out refer to the number of nodes in that layer
+We have nodes coming in and node going out, the nodes going in refer to the nodes coming in from the previous layer and the nodes going out refer to the number of nodes in that layer.
 
-we declare arrays for weights, biases, costgradientW, costgradientB, weightVelocities, & biasVelocities;
+We declare arrays for weights, biases, cost gradients for weights, cost gradients for biases, weight velocities, & bias velocities.
 
-Then we create an iactivation object, which is equipped with activate and derivative functions
+Then we create an iactivation object, which is equipped with activate and derivative functions.
 
 
 ### Then we a have a function in the layer script that constructs the layer
-it dynamically allocates the number of nodes coming in and out each layer
+It dynamically allocates the number of nodes coming in and out each layer
+and makes an activationsigmoid object called activation, which has functions like activate and derivative.
 
-and makes the activation equal a new instance of an activationsigmoid object 
-which has functions like activate and derivative
+The weights are then made a 2d array that are the size of the number of nodes coming in * the number of nodes going out, and the biases are made an array the size of the number of nodes going out. 
 
-the weights are then made a 2d array that are the size of the number of nodes coming in * the number of nodes going out
-
-and the biases are made an array the size of the number of nodes going out 
+Here are some other variables that we initialize. 
 
 costGradientW = new double[weights.Length];
 costGradientB = new double[biases.Length];
 weightVelocities = new double[weights.Length];
 biasVelocities = new double[biases.Length];
 
-and these variables are given there respective lengths according to the main varibale they were assigned
-
-and then we intialize random weights at the end of the layer function
+and these variables are given there respective lengths according to the main variable (weights or biases) they were assigned, and then we intialize random weights at the end of the layer function.
 
 
 ### The Calculate outputs function has two parameters, that of a layer and that of a layerlearndata object
-its going to use the layer to calculate the outputs and its simply going to update the object with new values
+It's going to use the layer to calculate the outputs and it's simply going to update the object with new values.
 
-first we create an array weightedInputs to store the weighted sums for each output node
-loop through the outgoing nodes 
-and create a weightedinput variable to hold the current bias value
-then you loop through the inner nodes to access the weights, and add them to the equation
-equation: wx + b
-the bias value is gotten before the inner loop so each nodes bias value, 
-pertains to each weight product between one nodes and rest of the nodes it's connected to
+First we create an array weightedInputs to store the weighted sums for each output node, loop through the outgoing nodes and create a weightedinput variable to hold the current bias value.
+Then you loop through the inner nodes to access the weights, and add them to the equation
+(equation: wx + b)
+the bias value is gotten before the inner loop so each nodes bias value, pertains to each weight product between one nodes and rest of the nodes it's connected to.
 
 And so the bias value corresponds to each node to node weight connection 
 Since one bias value corresponds to one node and that one nodes corresponds to every other node in the next layer, in terms of weight connections.
