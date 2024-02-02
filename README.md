@@ -134,3 +134,18 @@ or the layer right next to the output layer
 
 and within the hidden layer function 
 we intialize the layerlearndata activations similar to before
+
+we run a for loop that goes through all the outgoing nodes in that layer
+and then we initialize a variable called weightedInputDerivativeSum = 0;
+
+we create another inner for loop, that goes through the next layer, more towards the inside of the layer
+
+and there is where you get the weight connection between the two layers 
+and you multiply that weight connection times the node in the next layer
+and use that to get the weightedinputderivative sum
+
+outside of that inner for loop you find the activation derivative by using the derivative function from the activation
+class in the beginning of the code, on the weights of all the layer connections given to the 
+layerlearndata.weightedinputs variable in the calculate outputs function in the layer class
+and then you update the layerlearndata.nodevalues by multiplying the weightedinputderivativesum x activationderivative
+
