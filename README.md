@@ -37,8 +37,11 @@ The weights are then made a 2d array that are the size of the number of nodes co
 Here are some other variables that we initialize. 
 
 costGradientW = new double[weights.Length];
+
 costGradientB = new double[biases.Length];
+
 weightVelocities = new double[weights.Length];
+
 biasVelocities = new double[biases.Length];
 
 and these variables are given there respective lengths according to the main variable (weights or biases) they were assigned, and then we intialize random weights at the end of the layer function.
