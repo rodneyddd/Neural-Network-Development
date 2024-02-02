@@ -7,7 +7,7 @@ Currently working on the creation of AI models to use for classification and pre
 
 # WHY:
 
-I'm really interested in AI models as I've used to AI to debug code before and became fascinated with the applications that AI could be used for. Upon firther research, I found that Neural Networks are the basis for a lot of different AI applications. I def wanna get into things like NLP down the road, but I'm currently working on this.
+I'm really interested in AI models as I've used to AI to debug code before and became fascinated with the applications that AI could be used for. Upon further research, I found that Neural Networks are the basis for a lot of different AI applications. I def wanna get into things like NLP down the road, but I'm currently working on this.
 
 The goal with this is to use this for Celestial Body Classification and Spacecraft Trajectory Prediction.
 And to learn more about constructing these models based on how well they perform each task.
