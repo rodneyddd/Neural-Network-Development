@@ -136,7 +136,7 @@ and within the hidden layer function
 we intialize the layerlearndata activations similar to before
 
 we run a for loop that goes through all the outgoing nodes in that layer
-and then we initialize a variable called weightedInputDerivativeSum = 0;
+and then we initialize a variable called weightedInputDerivativeSum to 0;
 
 we create another inner for loop, that goes through the next layer, more towards the inside of the layer
 
