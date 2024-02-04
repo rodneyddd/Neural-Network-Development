@@ -99,7 +99,7 @@ And at the end of the LEARN function we call the clear gradients function, to re
 
 
 
-#### The UPDATEALLGRADIENTS function is where we update all the gradients, to be administered lately
+#### The UPDATEALLGRADIENTS function is where we update all the gradients, to be administered later
 
 First we calculate the outputs so as to run the neural network and have it passed through and ran through
 using CalculateOutputs with dataPoint.inputs as the parameter
@@ -110,7 +110,7 @@ Layer outputLayer = layers[layers.Length - 1];
 
 Using that array to make an array the size of the output nodes of that objects outputs nodes
 
-And call the calculateouputlayernodevalues function with respect to the output layer object
+#####And call the CalculateOutputLayerNodeValues function with respect to the output layer object
 
 Inside the calculate output layer node values function
 where we first create an array called activations that equal to the layerlearndata activation private member value 
@@ -120,15 +120,26 @@ Then you create a for loop, that runs through all the output nodes
 It uses the activations array just created, in conjunction with activation and derivative class functions to update the values of the 
 layerlearndata objects last layer
 
-The next part of the updateallgradients function is call the updategradients function in relation to the outputlayer object
+#####The next part of the UpdateAllGradients function is call the UpdateGradients function in relation to the outputlayer object
 
 Where the cost gradients are simply updated via a nodein nodeout nested loop, where the gradients are updated based on the 
 updated layerlearndata object output layer values
 
+It has a parameter of a layerlearndata object
+
+It has a nested loop going through the incoming and outgoing nodes 
+
+With the outer loop being the outgoing nodes
+
+Within the nested loop you update the gradients of the weights 
+
+And when that inner loop is over and you’re back in the outer loop you now update the biases
+
+
 When we have a for loop, where we go through the rest of the layers backwards 
 within it we create a layer object representing the "next layer"
 
-Than we run a calculatehiddenlayers function that takes in the layer one away from the next layer , 
+#####Than we run a CalculateHiddenLayers function that takes in the layer one away from the next layer , 
 for ex: in the first loop, that function would take in the output layer and the current hidden layer, 
 or the layer right next to the output layer
 
