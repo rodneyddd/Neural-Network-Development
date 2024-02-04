@@ -90,61 +90,61 @@ What this does is calculate the final layer, since you’re calculating the outp
 
 
 ### than we have a LEARN function that has parameters of a dataset of a trainingbatch, and learning rate
-first we loop through each datapoint in the training batch and update the gradients, by putting each datapoint in the function UpdateAllGradients
+First we loop through each datapoint in the training batch and update the gradients, by putting each datapoint in the function UpdateAllGradients
 the datapoints in context, could literally be pixels in a picture we're trying 
 
-after that for loop, we call the APPLYGRADIENTS function with one parameter: learnrate/trainingbatch.Length
+After that for loop, we call the APPLYGRADIENTS function with one parameter: learnrate/trainingbatch.Length
 
-and at the end of the LEARN function we call the clear gradients function, to reset the gradients. to 9, for the next time the neuralnetwork is updated.
+And at the end of the LEARN function we call the clear gradients function, to reset the gradients. to 9, for the next time the neuralnetwork is updated.
 
 
 
 #### The UPDATEALLGRADIENTS function is where we update all the gradients, to be administered lately
 
-first we calculate the outputs so as to run the neural network and have it passed through and ran through
+First we calculate the outputs so as to run the neural network and have it passed through and ran through
 using CalculateOutputs with dataPoint.inputs as the parameter
-this gets the final layer of the inputs
+This gets the final layer of the inputs
 
-than we create an array of layer objects, that is the size of the whole neural network minus the first layer
+Than we create an array of layer objects, that is the size of the whole neural network minus the first layer
 Layer outputLayer = layers[layers.Length - 1];
 
-using that array to make an array the size of the output nodes of that objects outputs nodes
+Using that array to make an array the size of the output nodes of that objects outputs nodes
 
-and call the calculateouputlayernodevalues function with respect to the output layer object
+And call the calculateouputlayernodevalues function with respect to the output layer object
 
-inside the calculate output layer node values function
+Inside the calculate output layer node values function
 where we first create an array called activations that equal to the layerlearndata activation private member value 
 
-then you create a for loop, that runs through all the output nodes
+Then you create a for loop, that runs through all the output nodes
 
-it uses the activations array just created, in conjunction with activation and derivative class functions to update the values of the 
+It uses the activations array just created, in conjunction with activation and derivative class functions to update the values of the 
 layerlearndata objects last layer
 
-the next part of the updateallgradients function is call the updategradients function in relation to the outputlayer object
+The next part of the updateallgradients function is call the updategradients function in relation to the outputlayer object
 
-where the cost gradients are simply updated via a nodein nodeout nested loop, where the gradients are updated based on the 
+Where the cost gradients are simply updated via a nodein nodeout nested loop, where the gradients are updated based on the 
 updated layerlearndata object output layer values
 
-then we have a for loop, where we go through the rest of the layers backwards 
+When we have a for loop, where we go through the rest of the layers backwards 
 within it we create a layer object representing the "next layer"
 
-than we run a calculatehiddenlayers function that takes in the layer one away from the next layer , 
+Than we run a calculatehiddenlayers function that takes in the layer one away from the next layer , 
 for ex: in the first loop, that function would take in the output layer and the current hidden layer, 
 or the layer right next to the output layer
 
-and within the hidden layer function 
-we intialize the layerlearndata activations similar to before
+And within the hidden layer function 
+We intialize the layerlearndata activations similar to before
 
-we run a for loop that goes through all the outgoing nodes in that layer
-and then we initialize a variable called weightedInputDerivativeSum to 0;
+We run a for loop that goes through all the outgoing nodes in that layer
+And then we initialize a variable called weightedInputDerivativeSum to 0;
 
-we create another inner for loop, that goes through the next layer, more towards the inside of the layer
+We create another inner for loop, that goes through the next layer, more towards the inside of the layer
 
-and there is where you get the weight connection between the two layers 
-and you multiply that weight connection times the node in the next layer
-and use that to get the weightedinputderivative sum
+And there is where you get the weight connection between the two layers 
+And you multiply that weight connection times the node in the next layer
+And use that to get the weightedinputderivative sum
 
-outside of that inner for loop you find the activation derivative by using the derivative function from the activation
+Outside of that inner for loop you find the activation derivative by using the derivative function from the activation
 class in the beginning of the code, on the weights of all the layer connections given to the 
 layerlearndata.weightedinputs variable in the calculate outputs function in the layer class
 and then you update the layerlearndata.nodevalues by multiplying the weightedinputderivativesum x activationderivative
