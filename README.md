@@ -164,7 +164,7 @@ and then after that we call the UpdateGradients function (in the Layer Class) in
 
 Now that I've explained the UpdateAllGradients function, let's remember that the UpdateAllGradients function is being used in the Learn Function in a for loop where it runs through all datapoints.
 Outside of that for loop we have the 
-ApplyGradients Function (Layer Class)
+#### ApplyGradients Function (Layer Class)
 
 It has parameters for a learnrate, a regularization number, and momentum.
 
