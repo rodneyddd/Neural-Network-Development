@@ -194,6 +194,12 @@ Here I'd like to address a couple things, at the start of the entire program, yo
 pay attention to the fact that it is here, at this point in the function that the biasvelocities, weightvelocites, and biases are all updated. 
 As they'll continue to be updated as you move across the layers.
 
+That wraps up that function.
+
+There's another function called ApplyGradients in the Neural Network Class, 
+which simply has a for loop going through all the layers and runs the applygradients function through each of them.
+
+
 
 
 
