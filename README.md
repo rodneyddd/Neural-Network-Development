@@ -166,3 +166,35 @@ Now that I've explained the UpdateAllGradients function, let's remember that the
 Outside of that for loop we have the 
 ApplyGradients Function (Layer Class)
 
+It has parameters for a learnrate, a regularization number, and momentum.
+
+The learnrate determines the size of the steps taken during gradient descent, influencing the speed and stability of training.
+Momentum is a technique used to accelerate convergence and prevent oscillations during gradient descent.
+
+First you initialize a variable called the regularization factor, responsible reducing the variance of the model, without substantial increase in its bias.
+Variance refers to the sensitivity of the model's predictions to the specific data it's trained on, 
+and bias refers to the simplifying assumptions made by a model to make the target function easier to learn.
+The higher the bias the less the model will understand the data, the lower the bias, the more it will, but it could lead to overfitting.
+The regularizationfactor aims to reduce that.
+
+And so the The regularization factor is calculated as regularizationFactor = 1.0 - learnRate * regularization. 
+This factor is used to adjust the weights during training to prevent overfitting.
+
+Iterate through each weight in the neural network.
+Update the weight velocity using the momentum technique: weightVelocities[i] = momentum * weightVelocities[i] - learnRate * costGradientW[i].
+Update the weight using the weight velocity and regularization factor: weights[i] = regularizationFactor * weights[i] + weightVelocities[i].
+Reset the gradient for the next iteration.
+
+Iterate through each bias in the neural network.
+Update the bias velocity using the momentum technique: biasVelocities[i] = momentum * biasVelocities[i] - learnRate * costGradientB[i].
+Update the bias directly using the bias velocity.
+Reset the gradient for the next iteration.
+
+Here I'd like to address a couple things, at the start of the entire program, you notice that we only randomly intialized the weights,
+pay attention to the fact that it is here, at this point in the function that the biasvelocities, weightvelocites, and biases are all updated. 
+As they'll continue to be updated as you move across the layers.
+
+
+
+
+
