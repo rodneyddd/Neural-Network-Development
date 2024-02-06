@@ -200,6 +200,13 @@ There's another function called ApplyGradients in the Neural Network Class,
 which simply has a for loop going through all the layers and runs the applygradients function through each of them.
 
 
+And the final function we're gonna talk about is the clearallgradients function
+It's goal is to erase all accumulated gradients to prepare for the next iteration
+Here we have a for loop where we run through all the layers
+And use the Array.Clear() method on the cost gradient arrays. 
+In that method you specify the array, the starting index, and how long you wanna erase until, which in this case is just the length of the respective arrays.
+
+
 
 
 
