@@ -218,7 +218,7 @@ public class Layer
         //it knows the numnodesout because remember it was called in reference to a layer object
         //  nodeValues = hiddenLayer.CalculateHiddenLayerNodeValues(layers[hiddenLayerIndex + 1], nodeValues);
         {
-            double weightedInputDerivativeSum = 0;
+            
             //initializing the weightedinputderivativesum to 0, to be filled later
 
             // Calculate sum of weighted input derivatives from the next layer
@@ -227,7 +227,7 @@ public class Layer
             //it calculates the sum of the derivatives of the weighted inputs from the nodes in the next layer
             for (int nextNodeIndex = 0; nextNodeIndex < nextLayer.numNodesOut; nextNodeIndex++)
             {
-                double weight = nextLayer.GetWeight(nodeIndex, nextNodeIndex); //here you get the weight of the next layer
+                double weight = nextLayer.GetWeight(nodeIndex, nextNodeIndex); //here you get the weight of the next layer node
                 weightedInputDerivativeSum += weight * nextLayerNodeValues[nextNodeIndex]; 
                 //here you multiply the weight by the next layer node value
                 //and use that to get the weightedinputderivative sum
@@ -284,7 +284,7 @@ public class Layer
         this.activation = activation;
     }
 
-    //simplify gets a random weight
+    //simply gets a random weight
     public void InitializeRandomWeights(System.Random rng)
     {
         for (int i = 0; i < weights.Length; i++)
@@ -377,7 +377,8 @@ public class NeuralNetwork
         {
             Layer hiddenLayer = layers[hiddenLayerIndex];
             //hidden layer represents the specific layer we're going over
-            nodeValues = hiddenLayer.CalculateHiddenLayerNodeValues(layers[hiddenLayerIndex + 1], nodeValues);
+            nodeValues = hiddenLayer.CalculateHiddenLayerNodeValues(layers[hiddenLayerIndex], nodeValues);
+            //originally it was hiddenlayerindex + 1, keep that in mind
             //seems the parameter in this example is the next layer
             //parameters are the layers, as in all of them, and by layers i mean one column and the nodevalues which are, 
             //the size of number of nodes out, (the output layer)
